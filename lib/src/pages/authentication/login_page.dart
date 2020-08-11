@@ -1,9 +1,11 @@
 //Imports that are not mine
-import 'package:fark/src/utils/background_gradient.dart';
-import 'package:fark/src/utils/fadeAnimation.dart';
+import 'package:fark/src/bloc/authentication/login_bloc.dart';
 import 'package:flutter/material.dart';
 
 //Imports that are mine
+import 'package:fark/src/bloc/provider.dart';
+import 'package:fark/src/utils/background_gradient.dart';
+import 'package:fark/src/utils/fadeAnimation.dart';
 
 class LoginPage extends StatelessWidget {
 
@@ -73,6 +75,9 @@ class TitleAndSubtitle extends StatelessWidget {
 class ContainerMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    final bloc = Provider.of(context);
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -85,7 +90,7 @@ class ContainerMain extends StatelessWidget {
         padding: EdgeInsets.all(30.0),
         child: Column(
           children: [
-            SizedBox(height: 60.0),
+            SizedBox(height: 40.0),
             FormLogin(),
             SizedBox(height: 40.0),
             GreyTextFadeAnimation(
@@ -99,6 +104,7 @@ class ContainerMain extends StatelessWidget {
                 delay: 1.6,
                 text: 'Iniciar Sesion',
                 color: Color(0xff2AB7CA),
+                bloc: bloc,
               ),
             ),
             SizedBox(height: 40.0),
@@ -119,6 +125,9 @@ class ContainerMain extends StatelessWidget {
 class FormLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    final bloc = Provider.of(context);
+
     return FadeAnimation(
       delay: 1.4,
       child: Container(
@@ -137,10 +146,12 @@ class FormLogin extends StatelessWidget {
               hintText: 'Correo Electronico',
               textInputType: TextInputType.emailAddress,
               isPassword: false,
+              bloc: bloc,
             ),
             TextFieldLogin(
               hintText: 'Contraseña',
               isPassword: true,
+              bloc: bloc,
             )
           ],
         ),
@@ -154,35 +165,44 @@ class TextFieldLogin extends StatelessWidget {
   final String hintText;
   final TextInputType textInputType;
   final bool isPassword;
+  final LoginBloc bloc;
 
   TextFieldLogin({
     @required this.hintText,
     @required this.isPassword,
     this.textInputType,
+    @required this.bloc,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.grey[200]
-          )
-        )
-      ),
-      child: TextField(
-        keyboardType: textInputType,
-        obscureText: isPassword,
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: TextStyle(
-            color: Colors.grey
+    return StreamBuilder(
+      stream: isPassword ? bloc.passwordStream : bloc.emailStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return Container(
+          padding: EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: Colors.grey[200]
+              )
+            )
           ),
-          border: InputBorder.none
-        ),
-      ),
+          child: TextField(
+            keyboardType: textInputType,
+            obscureText: isPassword,
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: TextStyle(
+                color: Colors.grey
+              ),
+              border: InputBorder.none,
+              errorText: snapshot.error
+            ),
+            onChanged: isPassword ? bloc.changePassword : bloc.changeEmail,
+          ),
+        );
+      },
     );
   }
 }
@@ -216,36 +236,53 @@ class ButtonIniciarSesion extends StatelessWidget {
   final double delay;
   final String text;
   final Color color;
+  final LoginBloc bloc;
 
   ButtonIniciarSesion({
     this.delay = 1,
     this.text  = 'Iniciar Sesion',
-    @required this.color
+    @required this.color,
+    @required this.bloc
   });
 
   @override
   Widget build(BuildContext context) {
-    return FadeAnimation(
-      delay: delay,
-      child: Container(
-        height: 50.0,
-        margin: EdgeInsets.symmetric(horizontal: 50.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50.0),
-          color: color
-        ),
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 16.0,
-              fontFamily: 'ProductSans'
+    return StreamBuilder(
+      stream: bloc.formValidStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return FadeAnimation(
+          delay: delay,
+          child: RaisedButton(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
+              child: Text(
+                text,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
+                  fontFamily: 'ProductSans'
+                ),
+              ),
             ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50.0)
+            ),
+            elevation: 0.0,
+            color: color,
+            onPressed: snapshot.hasData ? () => _login(context, bloc) : null,
           ),
-        ),
-      ),
+        );
+      },
     );
+  }
+
+  _login(BuildContext context, LoginBloc bloc){
+    print('======================');
+    print('Email: ${bloc.email}');
+    print('Password: ${bloc.password}');
+    print('======================');
+
+    Navigator.pushReplacementNamed(context, 'home');
   }
 }
