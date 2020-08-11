@@ -116,7 +116,7 @@ class ButtonComenzar extends StatelessWidget {
       width: double.infinity,
       color: Colors.white,
       child: GestureDetector(
-        onTap: () => print('Navegar al login'),
+        onTap: () => Navigator.pushReplacementNamed(context, 'login'),
         child: Center(
           child: Padding(
             padding: EdgeInsets.only(bottom: 30.0),
@@ -149,7 +149,7 @@ class ButtonSkip extends StatelessWidget {
       child: Container(
         alignment: Alignment.centerRight,
         child: FlatButton(
-          onPressed: () => print('Navegar Al Login'),
+          onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
           child: Text(
             text,
             style: TextStyle(
