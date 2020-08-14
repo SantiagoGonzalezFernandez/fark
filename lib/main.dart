@@ -1,4 +1,6 @@
 //Imports that are not mine
+import 'package:fark/src/pages/home/profile/edit_profile_page.dart';
+import 'package:fark/src/pages/home/profile/profile_page.dart';
 import 'package:flutter/material.dart';
 
 //Imports that are mine
@@ -17,11 +19,13 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Fark',
-        initialRoute: 'login',
+        initialRoute: 'home',
         routes: {
-          'onboarding' : (BuildContext context) => OnboardingPage(),
-          'login'      : (BuildContext context) => LoginPage(),
-          'home'       : (BuildContext context) => HomePage(),
+          'onboarding'  : (BuildContext context) => OnboardingPage(),
+          'login'       : (BuildContext context) => LoginPage(),
+          'home'        : (BuildContext context) => HomePage(),
+          'profile'     : (BuildContext context) => ProfilePage(),
+          'editProfile' : (BuildContext context) => EditProfilePage(),
         },
       ),
     );
