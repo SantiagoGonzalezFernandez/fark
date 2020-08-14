@@ -1,11 +1,11 @@
 //Imports that are not mine
-import 'package:fark/src/widget/FarkLogo.dart';
 import 'package:flutter/material.dart';
 
 //Imports that are mine
 import 'package:fark/src/model/user_model.dart';
 import 'package:fark/src/provider/users_provider.dart';
 import 'package:fark/src/utils/fadeAnimation.dart';
+import 'package:fark/src/widget/FarkLogo.dart';
 
 class ProfilePage extends StatelessWidget {
 
