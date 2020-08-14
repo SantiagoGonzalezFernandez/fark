@@ -1,4 +1,5 @@
 //Imports that are not mine
+import 'package:fark/src/widget/FarkLogo.dart';
 import 'package:flutter/material.dart';
 
 //Imports that are mine
@@ -18,7 +19,7 @@ class ProfilePage extends StatelessWidget {
         if(snapshot.hasData){
 
           final users = snapshot.data;
-          return _crearPerfil(context, users[0]);
+          return _crearPerfil(context, users[4]);
 
         }else{
           return Center(child: CircularProgressIndicator());
@@ -61,10 +62,10 @@ class ProfilePage extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 50.0),
-                  child: Image(
+                  child: user.fotoUrl != null ? Image(
                     image: NetworkImage(user.fotoUrl),
                     height: 300.0,
-                  ),
+                  ) : FarkLogo(fontSize: 80)
                 ),
                 Positioned(
                   top: 230.0,
