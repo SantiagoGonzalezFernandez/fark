@@ -1,4 +1,5 @@
 //Imports that are not mine
+import 'package:fark/src/pages/home/trabajadores/trabajadores_page.dart';
 import 'package:flutter/material.dart';
 
 //Imports that are mine
@@ -15,7 +16,7 @@ class _HomePageState extends State<HomePage> {
 
   final pages = [
     Center(child: Text('OFERTAS')),
-    Center(child: Text('TRABAJADORES')),
+    TrabajadoresPage(),
     Center(child: Text('CHATS')),
     ProfilePage()
   ];

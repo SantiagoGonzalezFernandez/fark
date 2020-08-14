@@ -1,6 +1,7 @@
 //Imports that are not mine
 import 'package:fark/src/pages/home/profile/edit_profile_page.dart';
 import 'package:fark/src/pages/home/profile/profile_page.dart';
+import 'package:fark/src/pages/home/profile/profile_random_page.dart';
 import 'package:flutter/material.dart';
 
 //Imports that are mine
@@ -21,11 +22,12 @@ class MyApp extends StatelessWidget {
         title: 'Fark',
         initialRoute: 'home',
         routes: {
-          'onboarding'  : (BuildContext context) => OnboardingPage(),
-          'login'       : (BuildContext context) => LoginPage(),
-          'home'        : (BuildContext context) => HomePage(),
-          'profile'     : (BuildContext context) => ProfilePage(),
-          'editProfile' : (BuildContext context) => EditProfilePage(),
+          'onboarding'    : (BuildContext context) => OnboardingPage(),
+          'login'         : (BuildContext context) => LoginPage(),
+          'home'          : (BuildContext context) => HomePage(),
+          'profile'       : (BuildContext context) => ProfilePage(),
+          'editProfile'   : (BuildContext context) => EditProfilePage(),
+          'profileRandom' : (BuildContext context) => ProfileRandomPage(),
         },
       ),
     );

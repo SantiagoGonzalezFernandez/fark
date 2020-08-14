@@ -1,12 +1,33 @@
 //Imports that are not mine
-import 'package:fark/src/utils/fadeAnimation.dart';
 import 'package:flutter/material.dart';
 
 //Imports that are mine
+import 'package:fark/src/model/user_model.dart';
+import 'package:fark/src/provider/users_provider.dart';
+import 'package:fark/src/utils/fadeAnimation.dart';
 
 class ProfilePage extends StatelessWidget {
+
+  final usersProvider = new UsersProvider();
+  
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: usersProvider.cargarUsers(),
+      builder: (BuildContext context, AsyncSnapshot<List<UserModel>> snapshot) {
+        if(snapshot.hasData){
+
+          final users = snapshot.data;
+          return _crearPerfil(context, users[0]);
+
+        }else{
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+
+  Widget _crearPerfil(BuildContext context, UserModel user) {
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
       child: Container(
@@ -35,13 +56,13 @@ class ProfilePage extends StatelessWidget {
                       Icons.edit,
                       color: Colors.white,
                     ),
-                    onTap: () => Navigator.pushNamed(context, 'editProfile'),
+                    onTap: () => Navigator.pushNamed(context, 'editProfile', arguments: user),
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 50.0),
                   child: Image(
-                    image: NetworkImage('https://purepng.com/public/uploads/large/purepng.com-manmanadult-malemale-childboy-beingmens-1421526920943c4xhn.png'),
+                    image: NetworkImage(user.fotoUrl),
                     height: 300.0,
                   ),
                 ),
@@ -64,7 +85,7 @@ class ProfilePage extends StatelessWidget {
                           FadeAnimation(
                             delay: 0.2,
                             child: Text(
-                              'Dillom Hofman'.toUpperCase(),
+                              user.nombre.toUpperCase(),
                               style: TextStyle(
                                 fontFamily: 'ProductSans',
                                 fontWeight: FontWeight.bold,
@@ -77,7 +98,7 @@ class ProfilePage extends StatelessWidget {
                           FadeAnimation(
                             delay: 0.3,
                             child: Text(
-                              'Plane Pilot',
+                              user.trabajo,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 18.0
@@ -88,7 +109,7 @@ class ProfilePage extends StatelessWidget {
                           FadeAnimation(
                             delay: 0.5,
                             child: Text(
-                              'Irure incididunt aliquip amet laboris Lorem proident ea ullamco eiusmod.',
+                              user.descripcion,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.black,
@@ -151,7 +172,7 @@ class ProfilePage extends StatelessWidget {
                             ),
                             SizedBox(height: 5.0),
                             Text(
-                              '24',
+                              user.edad.toString(),
                               style: TextStyle(
                                 color: Color(0xff2AB7CA),
                                 fontSize: 22.0,
@@ -171,7 +192,7 @@ class ProfilePage extends StatelessWidget {
                             ),
                             SizedBox(height: 5.0),
                             Text(
-                              'SSR',
+                              user.experiencia,
                               style: TextStyle(
                                 color: Color(0xff2AB7CA),
                                 fontSize: 22.0,
